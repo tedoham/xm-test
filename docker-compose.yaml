@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=companies
+    networks:
+      - fullstack-app
+  
+  backend:
+    container_name: backend
+    restart: always
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_SOURCE=postgresql://root:secret@postgres:5432/companies?sslmode=disable
+      - USER_AUTH_ACCESS_JWT_SECRETE_KEY=superSecreteAccessToken
+      - USER_AUTH_REFRESH_JWT_SECRETE_KEY=superSecreteRefreshToken
+      - USER_AUTH_JWT_EXPIRATION=30
+      - USER_AUTH_CUSTOM_KEY_SECRETE=superSecreteCustomKey
+    depends_on:
+      - postgres
+    # entrypoint: [ "/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh" ]
+    command: [ "/app/main" ]
+    networks:
+      - fullstack-app
+
+networks:
+  fullstack-app:
+    driver: bridge
