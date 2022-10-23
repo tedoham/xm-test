@@ -1,6 +1,3 @@
-#To get started with the frontend
-
-###please do the tasks accordingly
 
 #### ** please install docker and postgres to get started then follow the points below
 
@@ -8,7 +5,7 @@
 
 2 - Type `make postgres` to create container from postgres image  
 
-3 - Type `make createdb` to create database name `products`  
+3 - Type `make createdb` to create database name `companies`  
 
 4 - Type `make migrateup` to make migration on postgres database which creates your database  
 
